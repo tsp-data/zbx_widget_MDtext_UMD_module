@@ -56,6 +56,8 @@ const html = computed(() =>
     html: conf.value.html !== false,
     breaks: conf.value.breaks !== false,
     links: conf.value.links === 'same-tab' ? 'same-tab' : 'new-tab',
+    // Relative links and images of a loaded document resolve against its URL.
+    baseUrl: source.value.kind === 'url' ? source.value.url : undefined,
   }),
 )
 

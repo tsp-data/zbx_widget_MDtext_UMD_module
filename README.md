@@ -112,18 +112,62 @@ The document is fetched by the **browser of the person viewing the dashboard**, 
 dashboard page, as a plain `GET`. That decides what works:
 
 **Same origin - recommended.** A relative URL, or an absolute one with the same scheme, host and
-port as the Zabbix frontend, always works. Put the file anywhere the web server serves; the
-module's own asset directory is a natural place:
+port as the Zabbix frontend, always works, because the browser applies none of its cross-origin
+rules to it. Put the file anywhere the Zabbix web server serves; the module's own asset directory
+is a natural place:
 
 - URL `modules/js_wrapper/assets/md/overview.md`
 - file `/usr/share/zabbix/modules/js_wrapper/assets/md/overview.md` (path of the Zabbix 7.0 RPM/DEB
   packages - adjust to your installation)
 
 Static files under `modules/` are served by the default Zabbix web server configuration; that is
-how the UMD assets themselves load.
+how the UMD assets themselves load. Two variants keep the documents out of the Zabbix tree while
+staying on the same origin:
 
-**Another origin.** The browser enforces CORS: the server hosting the document must answer with
-the header `Access-Control-Allow-Origin: *` (or the exact origin of the Zabbix frontend, e.g.
+- **A directory of your own**, mapped into the Zabbix site. The documents survive Zabbix upgrades
+  and can be maintained by other people (a `git pull` on the server, a network share):
+
+  ```apache
+  # /etc/httpd/conf.d/zabbix-docs.conf
+  Alias /zabbix/docs /srv/zabbix-docs
+  <Directory /srv/zabbix-docs>
+      Require all granted
+  </Directory>
+  ```
+
+  ```nginx
+  location /zabbix/docs/ {
+      alias /srv/zabbix-docs/;
+  }
+  ```
+
+  and `"url": "docs/overview.md"` in the widget.
+
+- **A reverse proxy** to the server where the documents really live (a wiki, a Git server, a
+  documentation portal). The browser talks only to Zabbix, so CORS, mixed content and the login
+  of the remote server all become the proxy's business and never reach the widget:
+
+  ```apache
+  # needs mod_proxy + mod_proxy_http; SSLProxyEngine only for an https:// backend
+  SSLProxyEngine on
+  ProxyPass        /zabbix/docs/ https://wiki.example.com/zabbix-docs/
+  ProxyPassReverse /zabbix/docs/ https://wiki.example.com/zabbix-docs/
+  ```
+
+  ```nginx
+  location /zabbix/docs/ {
+      proxy_pass https://wiki.example.com/zabbix-docs/;
+  }
+  ```
+
+  If the backend needs credentials, add them in the proxy configuration (`RequestHeader set
+  Authorization ...`, `proxy_set_header Authorization ...`) - the secret then stays on the
+  server instead of in `conf_json`.
+
+**Another origin.** The browser enforces CORS (Cross-Origin Resource Sharing - its rule for
+reading a resource from a different origin; not to be confused with CSRF, which is a different
+mechanism): the server hosting the document must answer with the header
+`Access-Control-Allow-Origin: *` (or the exact origin of the Zabbix frontend, e.g.
 `https://zabbix.example.com`). Nothing else is required - the request carries no custom headers,
 so there is no preflight, and the `Content-Type` of the document does not matter. Public raw
 file URLs of GitHub and GitLab send this header; a wiki, SharePoint or a plain intranet web
@@ -151,7 +195,16 @@ over HTTPS.
 
 **Authentication.** Cookies are sent only to the Zabbix origin itself; a cross-origin document
 must be readable without a login. There is deliberately no way to configure credentials for the
-request: `conf_json` is readable by every dashboard viewer.
+request: `conf_json` is readable by every dashboard viewer. A protected source is reached through
+the reverse proxy variant above.
+
+**Images and links inside the document.** Relative paths resolve against the document's URL, not
+against the dashboard page, so `![Legend](legend.svg)` next to `overview.md` just works and a
+folder of Markdown plus images can be moved as a whole. Images are not subject to CORS (an
+`<img>` may come from any origin), but they are subject to the mixed-content rule above, and they
+are requested with the cookies of their own host only - an image behind the login of another
+server does not load. Keeping images next to the document, on the Zabbix origin or behind the
+proxy, avoids all of it.
 
 **Other limits.** A `Content-Security-Policy` header added by a reverse proxy in front of Zabbix
 (`connect-src`) can forbid cross-origin requests. Browsers also restrict requests from a page on a

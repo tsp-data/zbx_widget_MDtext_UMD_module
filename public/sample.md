@@ -16,6 +16,11 @@ Point `conf.url` at `/sample.md` to see it - then edit the file and press
 | High     | `#E97659` |
 | Average  | `#FFA059` |
 
+Images next to the document work with a relative path - it resolves against the
+document's URL, not against the dashboard page:
+
+![Severity legend](legend.svg)
+
 > Blockquotes, code blocks and task lists work too.
 
 ```text
@@ -28,4 +33,6 @@ $ zabbix_get -s host -k agent.ping
 
 ---
 
-Anything executable is removed: <script>alert('xss')</script><img src=x onerror="alert(1)">
+Anything executable is removed. The source of this sentence contains a `<script>`
+tag and a `javascript:` link, and this is all that is left of them:
+<script>alert('xss')</script><a href="javascript:alert(1)">a link without its href</a>.
