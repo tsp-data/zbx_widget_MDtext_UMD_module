@@ -43,6 +43,10 @@ Benefits:
 - fast frontend iteration with Vite hot reload,
 - ability to inspect component state and tree via Vue DevTools.
 
+Local development screenshot:
+
+![Local development preview](images/zabbix_local_dev.png)
+
 ## 4. Build UMD Library for Zabbix Wrapper
 
 To build deployable UMD artifacts used by `js_wrapper`:
@@ -104,6 +108,10 @@ Example `conf_json` (document next to the module):
     "url": "modules/js_wrapper/assets/md/overview.md"
 }
 ```
+
+Zabbix dashboard result screenshot (both examples plus a note widget; dark theme in `README.md`):
+
+![Zabbix dashboard widget result](images/zabbix_dashboard.png)
 
 ## 6. Optional Commands
 

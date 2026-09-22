@@ -20,6 +20,19 @@ For build, local development, and deployment steps, see `BUILD.md`.
 - inherits the Zabbix theme (blue, dark, high-contrast) without configuration,
 - optional alignment, font scale and CSS class.
 
+## Screenshots
+
+Three widgets on a Zabbix 7.0 dashboard: a heading from inline `text` (header hidden,
+`align: center`, `valign: middle`, `scale: 2`), a note from inline `text`, and a document
+loaded from `url` with a relative image next to it.
+
+![MDtext widgets on a Zabbix dashboard, blue theme](images/zabbix_dashboard.png)
+
+The same dashboard in the dark theme - the widget has no colours of its own and inherits the
+theme (see "Theme" below):
+
+![MDtext widgets on a Zabbix dashboard, dark theme](images/zabbix_dashboard_dark.png)
+
 ## Technology
 
 - Vue 3
