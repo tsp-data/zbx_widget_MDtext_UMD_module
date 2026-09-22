@@ -189,3 +189,12 @@ and does not use `zbx.api`.
 - `src/services/source.js` - fetching a document with timeout and readable errors
 - `src/main.js`, `index.html`, `public/sample.md` - standalone development harness
 - `vite.lib.config.js` - UMD library build configuration
+
+## License
+
+GPL-3.0-or-later - see `LICENSE`. Copyright (c) 2026 TSP Data a.s.
+
+The UMD build bundles third-party libraries under their own, GPL-compatible licenses:
+[Vue](https://github.com/vuejs/core) (MIT), [marked](https://github.com/markedjs/marked) (MIT)
+and [DOMPurify](https://github.com/cure53/DOMPurify) (Apache-2.0 or MPL-2.0). Their copyright
+notices are in the packages' own `LICENSE` files (see `node_modules/` after `npm install`).
