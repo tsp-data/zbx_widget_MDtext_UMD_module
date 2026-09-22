@@ -116,7 +116,7 @@ port as the Zabbix frontend, always works. Put the file anywhere the web server 
 module's own asset directory is a natural place:
 
 - URL `modules/js_wrapper/assets/md/overview.md`
-- file `/usr/share/zabbix/ui/modules/js_wrapper/assets/md/overview.md` (path of the Zabbix 7.0
+- file `/usr/share/zabbix/modules/js_wrapper/assets/md/overview.md` (path of the Zabbix 7.0 RPM/DEB
   packages - adjust to your installation)
 
 Static files under `modules/` are served by the default Zabbix web server configuration; that is

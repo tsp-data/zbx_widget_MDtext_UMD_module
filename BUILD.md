@@ -62,11 +62,11 @@ Note: Vue, marked and DOMPurify are bundled directly into the UMD file (not exte
 
 ## 5. Deploy Artifacts to `js_wrapper`
 
-Copy the built files into the wrapper assets of a Zabbix frontend (path of the Zabbix 7.0
+Copy the built files into the wrapper assets of a Zabbix frontend (path of the Zabbix 7.0 RPM/DEB
 packages shown; adjust to your installation):
 
 ```sh
-ZABBIX_MODULES_DIR=/usr/share/zabbix/ui/modules
+ZABBIX_MODULES_DIR=/usr/share/zabbix/modules
 cp dist/MDtext.umd.js "$ZABBIX_MODULES_DIR/js_wrapper/assets/umd/MDtext.umd.js"
 cp dist/MDtext.css "$ZABBIX_MODULES_DIR/js_wrapper/assets/umd/MDtext.css"
 ```
@@ -74,7 +74,7 @@ cp dist/MDtext.css "$ZABBIX_MODULES_DIR/js_wrapper/assets/umd/MDtext.css"
 or, to a remote frontend:
 
 ```sh
-scp dist/MDtext.umd.js dist/MDtext.css root@zabbix-frontend:/usr/share/zabbix/ui/modules/js_wrapper/assets/umd/
+scp dist/MDtext.umd.js dist/MDtext.css root@zabbix-frontend:/usr/share/zabbix/modules/js_wrapper/assets/umd/
 ```
 
 Use a plain copy - not `cp -p` or `rsync -a`, which preserve the modification time the wrapper
