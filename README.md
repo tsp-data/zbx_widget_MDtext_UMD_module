@@ -192,9 +192,9 @@ and does not use `zbx.api`.
 
 ## License
 
-GPL-3.0-or-later - see `LICENSE`. Copyright (c) 2026 TSP Data a.s.
+MIT - see `LICENSE`. Copyright (c) 2026 TSP Data a.s.
 
-The UMD build bundles third-party libraries under their own, GPL-compatible licenses:
+The UMD build bundles third-party libraries under their own permissive licenses:
 [Vue](https://github.com/vuejs/core) (MIT), [marked](https://github.com/markedjs/marked) (MIT)
 and [DOMPurify](https://github.com/cure53/DOMPurify) (Apache-2.0 or MPL-2.0). Their copyright
 notices are in the packages' own `LICENSE` files (see `node_modules/` after `npm install`).
