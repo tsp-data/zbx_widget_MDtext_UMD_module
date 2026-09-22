@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" theme="blue-theme" color-scheme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zabbix MDtext widget - development</title>
+    <style>
+      /*
+       * Development harness. In Zabbix the widget body is the outer container and
+       * decides the size, the padding and - through the theme - the colours. This
+       * page emulates that: a resizable container with the colours of the Zabbix
+       * blue (light) or dark theme, which the module must inherit, never override.
+       */
+      body {
+        margin: 0;
+        padding: 16px;
+        font:
+          12px/1.4 Arial,
+          Helvetica,
+          sans-serif;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        background: #f0f2f5;
+        color: #1f2c33;
+      }
+      a {
+        color: #0275b8;
+      }
+      html[theme='dark-theme'] body {
+        background: #0e1012;
+        color: #f2f2f2;
+      }
+      html[theme='dark-theme'] a {
+        color: #4796c4;
+      }
+
+      /* Simulated Zabbix widget body: 8px 10px is the padding of .dashboard-grid-widget-contents. */
+      #widget-container {
+        width: 600px;
+        height: 300px;
+        resize: both;
+        overflow: hidden;
+        box-sizing: border-box;
+        padding: 8px 10px;
+        border: 1px solid #cfcfcf;
+        background: #ffffff;
+      }
+      html[theme='dark-theme'] #widget-container {
+        background: #2b2b2b;
+        border-color: #383838;
+      }
+
+      /* Vue mount node must fill its parent completely, like .vue-wrapper-root does. */
+      #app {
+        width: 100%;
+        height: 100%;
+      }
+
+      #panel {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 440px;
+      }
+      #panel label {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      #conf {
+        width: 100%;
+        height: 260px;
+        box-sizing: border-box;
+        font:
+          12px/1.4 Consolas,
+          monospace;
+      }
+      #conf.invalid {
+        outline: 2px solid #e45959;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      Local demo hierarchy:
+      widget-container (simulated Zabbix widget body)
+        -> app (Vue root, fills the body like .vue-wrapper-root)
+          -> App.vue
+    -->
+    <div id="widget-container">
+      <div id="app"></div>
+    </div>
+
+    <div id="panel">
+      <label>
+        conf (JSON) - applied live, like the widget configuration in Zabbix
+        <textarea id="conf" spellcheck="false"></textarea>
+      </label>
+      <label>
+        Theme
+        <select id="theme">
+          <option value="blue-theme">blue-theme (light)</option>
+          <option value="dark-theme">dark-theme</option>
+        </select>
+      </label>
+      <button id="cycle" type="button">Simulate refresh cycle (update)</button>
+      <small>
+        Try <code>"url": "/sample.md"</code> for the url mode - the file is
+        <code>public/sample.md</code>.
+      </small>
+    </div>
+
+    <!-- Vite dev entry for local preview -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
